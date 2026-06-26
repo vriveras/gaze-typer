@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Gaze Typer — Blink to Type</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="app">
+    <header class="topbar">
+      <h1>Gaze Typer</h1>
+      <button id="settingsBtn" class="icon-btn" aria-label="Settings">⚙</button>
+    </header>
+
+    <!-- Start screen -->
+    <section id="startScreen" class="screen">
+      <div class="hero">
+        <div class="hero-eye">👁️</div>
+        <h2>Blink to type</h2>
+        <p>Letters rotate one at a time. When the letter you want is shown, <strong>blink</strong> to select it.</p>
+        <button id="startBtn" class="primary-btn">Start Camera</button>
+        <p class="hint">Allow camera access when prompted. Everything runs on your device — no video leaves your phone.</p>
+      </div>
+    </section>
+
+    <!-- Main typing screen -->
+    <section id="typeScreen" class="screen hidden">
+      <!-- Typed output -->
+      <div class="output-wrap">
+        <div id="output" class="output" aria-live="polite"></div>
+        <span id="caret" class="caret">▋</span>
+      </div>
+
+      <!-- Current letter + dwell ring -->
+      <div class="stage">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" class="ring-svg">
+            <circle class="ring-bg" cx="60" cy="60" r="54" />
+            <circle id="ringProgress" class="ring-fg" cx="60" cy="60" r="54" />
+          </svg>
+          <div id="currentLetter" class="current-letter">A</div>
+        </div>
+        <div id="blinkPulse" class="blink-pulse">Selected!</div>
+      </div>
+
+      <!-- Carousel of upcoming letters -->
+      <div id="carousel" class="carousel"></div>
+
+      <!-- Status / camera -->
+      <div class="bottom">
+        <div class="status-row">
+          <span id="faceDot" class="dot dot-off"></span>
+          <span id="statusText" class="status-text">Loading…</span>
+        </div>
+        <div class="video-wrap">
+          <video id="video" playsinline muted></video>
+          <div id="eyeMeter" class="eye-meter"><div id="eyeFill" class="eye-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="pauseBtn" class="ghost-btn">Pause</button>
+        <button id="speakBtn" class="ghost-btn">🔊 Speak</button>
+        <button id="clearBtn" class="ghost-btn">Clear</button>
+      </div>
+    </section>
+
+    <!-- Settings drawer -->
+    <section id="settings" class="drawer hidden">
+      <div class="drawer-head">
+        <h2>Settings</h2>
+        <button id="closeSettings" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+
+      <label class="field">
+        <span>Rotation speed: <b id="speedLabel">1.5s</b> per letter</span>
+        <input id="speedRange" type="range" min="0.6" max="3.5" step="0.1" value="1.5" />
+      </label>
+
+      <label class="field">
+        <span>Blink sensitivity: <b id="sensLabel">0.50</b></span>
+        <input id="sensRange" type="range" min="0.2" max="0.8" step="0.01" value="0.5" />
+        <small>Lower = easier to trigger. Higher = needs a firmer blink.</small>
+      </label>
+
+      <label class="field">
+        <span>Blink hold: <b id="holdLabel">120ms</b></span>
+        <input id="holdRange" type="range" min="0" max="600" step="20" value="120" />
+        <small>Eyes must stay closed this long to count. Higher reduces accidental selections.</small>
+      </label>
+
+      <label class="field toggle">
+        <span>Speak each selected letter</span>
+        <input id="speakToggle" type="checkbox" />
+      </label>
+
+      <label class="field toggle">
+        <span>Mirror camera preview</span>
+        <input id="mirrorToggle" type="checkbox" checked />
+      </label>
+
+      <p class="hint">Tip: increase <b>Blink hold</b> for users whose natural blinks would otherwise select letters by accident.</p>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
