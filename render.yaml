@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: gaze-typer
+    runtime: static
+    # Files live at the repo root, so the published directory is "."
+    staticPublishPath: .
+    # No build step — these are plain static files.
+    buildCommand: ""
+    pullRequestPreviewsEnabled: false
+    headers:
+      # Allow the front camera to be used by this page.
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(self)
+    routes:
+      # Single-page app: serve index.html for unknown paths.
+      - type: rewrite
+        source: /*
+        destination: /index.html
