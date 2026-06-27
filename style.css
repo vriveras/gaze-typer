@@ -82,6 +82,57 @@ html, body {
   box-shadow: 0 8px 30px #4f8cff44;
 }
 .hint { font-size: 13px; color: var(--muted); margin-top: 14px; }
+.mode-link {
+  display: inline-block;
+  margin-top: 22px;
+  color: var(--accent-2);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  border-bottom: 1px dashed #36e2b466;
+  padding-bottom: 2px;
+}
+
+/* Flash card (tap-to-type mode) */
+.flash-card {
+  position: relative;
+  width: 100%;
+  margin: 18px 0 6px;
+  aspect-ratio: 1 / 1;
+  max-height: 56vh;
+  border: none;
+  border-radius: 28px;
+  background:
+    radial-gradient(120% 120% at 50% 0%, #233059 0%, var(--panel) 60%);
+  box-shadow: 0 10px 40px #00000055, inset 0 0 0 1px #ffffff14;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.flash-card:active { transform: scale(0.985); filter: brightness(1.1); }
+.flash-card .current-letter {
+  position: static;
+  inset: auto;
+  font-size: 38vw;
+  max-font-size: 260px;
+  line-height: 1;
+}
+@media (min-width: 520px) {
+  .flash-card .current-letter { font-size: 200px; }
+}
+.tap-hint {
+  position: absolute;
+  bottom: 18px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--muted);
+  opacity: 0.7;
+}
 
 /* Output */
 .output-wrap {
