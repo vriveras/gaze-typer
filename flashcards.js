@@ -22,7 +22,7 @@ const card = el("card");
 
 /* ----------------------------- Settings ---------------------------- */
 function loadSettings() {
-  const d = { speed: 1.2, announce: true, speak: true };
+  const d = { speed: 5, announce: true, speak: true };
   try {
     return { ...d, ...JSON.parse(localStorage.getItem("gazeTyperFlash") || "{}") };
   } catch {
@@ -47,7 +47,7 @@ function wireSettings() {
     settings.speed = parseFloat(speedRange.value);
     el("speedLabel").textContent = settings.speed.toFixed(1) + "s";
     saveSettings();
-    if (!paused) restartFlashing(); // apply new speed immediately
+    if (!paused) armTimer(); // apply new speed immediately
   };
   announceToggle.onchange = () => { settings.announce = announceToggle.checked; saveSettings(); };
   speakToggle.onchange = () => { settings.speak = speakToggle.checked; saveSettings(); };
@@ -77,16 +77,23 @@ function advance() {
   showCurrent();
 }
 
-function startFlashing() {
+// (Re)start just the auto-advance timer, without re-announcing the letter.
+function armTimer() {
   stopFlashing();
-  showCurrent();
   timer = setInterval(advance, settings.speed * 1000);
+}
+function startFlashing() {
+  showCurrent();
+  armTimer();
 }
 function stopFlashing() {
   if (timer) { clearInterval(timer); timer = null; }
 }
-function restartFlashing() {
-  startFlashing();
+
+// "Next" button: jump to the next letter now and reset the dwell window.
+function manualNext() {
+  advance();
+  if (!paused) armTimer();
 }
 
 /* --------------------------- Selection ----------------------------- */
@@ -108,7 +115,7 @@ function selectCurrent() {
   if (navigator.vibrate) navigator.vibrate(40);
 
   // Restart the dwell so the user has a fresh full interval to pick the next.
-  if (!paused) restartFlashing();
+  if (!paused) armTimer();
 }
 
 /* --------------------------- Speech -------------------------------- */
@@ -135,6 +142,8 @@ function wireControls() {
 
   // Tap the big card to select the current letter.
   card.addEventListener("click", () => { if (!paused) selectCurrent(); });
+
+  el("nextBtn").onclick = manualNext;
 
   el("pauseBtn").onclick = () => {
     paused = !paused;
